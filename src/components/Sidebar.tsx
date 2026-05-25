@@ -275,7 +275,7 @@ export function Sidebar({ sessionId, onSessionChange, online }: Props) {
             )}
             {jobs.map(job => {
               const scheduleStr = job.schedule_display as string ?? (job.schedule as { display?: string })?.display ?? ''
-              const rawSchedule = typeof job.schedule === 'string' ? job.schedule : (job.schedule as { cron?: string })?.cron ?? scheduleStr
+              const rawSchedule = typeof job.schedule === 'string' ? job.schedule : (job.schedule as unknown as { cron?: string })?.cron ?? scheduleStr
               const state = job.state as string ?? ''
               const lastStatus = job.last_status as string ?? ''
               const nextRun = job.next_run_at as string ?? ''

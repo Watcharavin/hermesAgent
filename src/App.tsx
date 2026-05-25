@@ -14,7 +14,7 @@ import { sendLineMessage } from './api'
 
 interface DisplayMessage {
   id: string
-  role: 'user' | 'assistant' | 'error'
+  role: 'user' | 'assistant' | 'error' | 'image'
   content: string
   timestamp: Date
   tokens?: number
