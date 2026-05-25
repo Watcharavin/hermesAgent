@@ -1,4 +1,10 @@
-const BASE = ''  // Vite proxy forwards /health, /v1, /api → localhost:8642
+const IS_DEV = import.meta.env.DEV
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL ?? ''
+const CONFIG_URL = import.meta.env.VITE_CONFIG_URL ?? ''
+
+// In dev: Vite proxy forwards to localhost. In prod: use env var URLs.
+const BASE = IS_DEV ? '' : GATEWAY_URL
+const CONFIG_BASE = IS_DEV ? '' : CONFIG_URL
 
 // ── Health ──────────────────────────────────────────────────────────────────
 
@@ -237,7 +243,7 @@ export interface Session {
 // ── LINE Webhook ──────────────────────────────────────────────────────────────
 
 export async function updateLineWebhook(webhookUrl: string): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch('/config-api/update-line-webhook', {
+  const res = await fetch(`${CONFIG_BASE}/config-api/update-line-webhook`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ webhookUrl }),
@@ -249,7 +255,7 @@ export async function updateLineWebhook(webhookUrl: string): Promise<{ ok: boole
 // ── Logs (via config-server) ──────────────────────────────────────────────────
 
 export async function getLogs(source: 'gateway' | 'cloudflared' | 'configserver' = 'gateway', lines = 200): Promise<{ lines: string[]; total: number }> {
-  const res = await fetch(`/config-api/logs?source=${source}&lines=${lines}`)
+  const res = await fetch(`${CONFIG_BASE}/config-api/logs?source=${source}&lines=${lines}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
@@ -257,7 +263,7 @@ export async function getLogs(source: 'gateway' | 'cloudflared' | 'configserver'
 // ── LINE Push Notification ────────────────────────────────────────────────
 
 export async function sendLineMessage(message: string, to?: string): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch('/config-api/send-line', {
+  const res = await fetch(`${CONFIG_BASE}/config-api/send-line`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, to }),
@@ -269,7 +275,7 @@ export async function sendLineMessage(message: string, to?: string): Promise<{ o
 // ── KIE Image Generation ──────────────────────────────────────────────────────
 
 export async function generateImage(prompt: string, aspect_ratio = 'auto', resolution = '1K'): Promise<{ ok: boolean; taskId?: string; error?: string }> {
-  const res = await fetch('/config-api/generate-image', {
+  const res = await fetch(`${CONFIG_BASE}/config-api/generate-image`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt, aspect_ratio, resolution }),
@@ -287,7 +293,7 @@ export async function getImageStatus(taskId: string): Promise<{
     failMsg?: string
   }
 }> {
-  const res = await fetch(`/config-api/image-status?taskId=${encodeURIComponent(taskId)}`)
+  const res = await fetch(`${CONFIG_BASE}/config-api/image-status?taskId=${encodeURIComponent(taskId)}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
@@ -304,7 +310,7 @@ export interface Skill {
 }
 
 export async function getSkills(): Promise<Skill[]> {
-  const res = await fetch('/config-api/skills')
+  const res = await fetch(`${CONFIG_BASE}/config-api/skills`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
   return data.skills ?? []
@@ -313,21 +319,21 @@ export async function getSkills(): Promise<Skill[]> {
 // ── Memory files (via config-server) ─────────────────────────────────────────
 
 export async function getMemoryFiles(): Promise<string[]> {
-  const res = await fetch('/config-api/memory')
+  const res = await fetch(`${CONFIG_BASE}/config-api/memory`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
   return data.files ?? []
 }
 
 export async function getMemoryFile(filename: string): Promise<string> {
-  const res = await fetch(`/config-api/memory/${encodeURIComponent(filename)}`)
+  const res = await fetch(`${CONFIG_BASE}/config-api/memory/${encodeURIComponent(filename)}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
   return data.content ?? ''
 }
 
 export async function saveMemoryFile(filename: string, content: string): Promise<void> {
-  const res = await fetch(`/config-api/memory/${encodeURIComponent(filename)}`, {
+  const res = await fetch(`${CONFIG_BASE}/config-api/memory/${encodeURIComponent(filename)}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ content }),
