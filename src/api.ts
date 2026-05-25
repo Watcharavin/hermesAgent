@@ -4,7 +4,7 @@ const CONFIG_URL = import.meta.env.VITE_CONFIG_URL ?? ''
 
 // In dev: Vite proxy forwards to localhost. In prod: use env var URLs.
 const BASE = IS_DEV ? '' : GATEWAY_URL
-const CONFIG_BASE = IS_DEV ? '' : CONFIG_URL
+export const CONFIG_BASE = IS_DEV ? '' : CONFIG_URL
 
 // ── Health ──────────────────────────────────────────────────────────────────
 

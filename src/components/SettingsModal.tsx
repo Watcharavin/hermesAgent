@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { X, Save, RefreshCw, AlertCircle, Check, ChevronDown, Eye, EyeOff } from 'lucide-react'
+import { CONFIG_BASE } from '../api'
 
 interface Provider {
   id: string
@@ -36,8 +37,8 @@ export function SettingsModal({ onClose }: Props) {
     setLoading(true)
     try {
       const [pRes, cRes] = await Promise.all([
-        fetch('/config-api/providers'),
-        fetch('/config-api/config'),
+        fetch(`${CONFIG_BASE}/config-api/providers`),
+        fetch(`${CONFIG_BASE}/config-api/config`),
       ])
       const p: Provider[] = await pRes.json()
       const c: ConfigData = await cRes.json()
@@ -66,7 +67,7 @@ export function SettingsModal({ onClose }: Props) {
     setSaving(true)
     setError(null)
     try {
-      const res = await fetch('/config-api/config', {
+      const res = await fetch(`${CONFIG_BASE}/config-api/config`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
