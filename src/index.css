@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: #0a0a0f;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+}
+
+/* Prose styles for markdown */
+.prose-dark p { margin: 0.5rem 0; }
+.prose-dark p:first-child { margin-top: 0; }
+.prose-dark p:last-child { margin-bottom: 0; }
+.prose-dark h1, .prose-dark h2, .prose-dark h3 {
+  color: #f1f5f9;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+.prose-dark h1 { font-size: 1.25rem; }
+.prose-dark h2 { font-size: 1.1rem; }
+.prose-dark h3 { font-size: 1rem; }
+.prose-dark ul, .prose-dark ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+.prose-dark li { margin: 0.2rem 0; }
+.prose-dark code {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.85em;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  color: #a5f3fc;
+}
+.prose-dark pre {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.prose-dark pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+.prose-dark blockquote {
+  border-left: 3px solid #6366f1;
+  padding-left: 1rem;
+  color: #94a3b8;
+  margin: 0.5rem 0;
+}
+.prose-dark a { color: #818cf8; text-decoration: underline; }
+.prose-dark strong { color: #f1f5f9; font-weight: 600; }
+.prose-dark hr {
+  border-color: #1e293b;
+  margin: 1rem 0;
+}
+.prose-dark table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.prose-dark th, .prose-dark td {
+  border: 1px solid #1e293b;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+}
+.prose-dark th { background: #0f172a; color: #94a3b8; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
